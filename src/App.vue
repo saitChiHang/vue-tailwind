@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import HelloWorld from './components/HelloWorld.vue'
+import MapComponent from './components/MapComponent.vue'
 import Navbar from './components/Navbar.vue'
 
 const isDark = ref(false)
@@ -28,7 +28,7 @@ const toggleDark = () => {
   <div class="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
     <Navbar :isDark="isDark" @toggle-dark="toggleDark" />
     <div class="container mx-auto px-4 pt-20">
-      <HelloWorld msg="Vite + Vue" />
+      <MapComponent />
     </div>
   </div>
 </template>
