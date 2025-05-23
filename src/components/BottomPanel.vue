@@ -17,18 +17,25 @@ const mockTableData = [
   { id: 1, name: 'Item 1', value: 100 },
   { id: 2, name: 'Item 2', value: 200 },
   { id: 3, name: 'Item 3', value: 300 },
+  { id: 4, name: 'Item 4', value: 400 },
+  { id: 5, name: 'Item 5', value: 500 },
+  { id: 6, name: 'Item 6', value: 600 },
+  { id: 7, name: 'Item 7', value: 700 },
+  { id: 8, name: 'Item 8', value: 800 },
 ];
 
 const navItems = [
   { id: 1, name: 'Navigation 1' },
   { id: 2, name: 'Navigation 2' },
   { id: 3, name: 'Navigation 3' },
+  { id: 4, name: 'Navigation 4' },
+  { id: 5, name: 'Navigation 5' },
 ];
 </script>
 
 <template>
   <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300"
-       :class="{ 'h-[500px]': isExpanded, 'h-12': !isExpanded }">
+       :class="{ 'h-[40vh]': isExpanded, 'h-12': !isExpanded }">
     <!-- Header -->
     <div class="flex items-center justify-between px-4 h-12 border-b dark:border-gray-700">
       <h3 class="text-gray-800 dark:text-white font-medium">Panel</h3>
@@ -39,7 +46,7 @@ const navItems = [
     </div>
 
     <!-- Content -->
-    <div v-show="isExpanded" class="h-[calc(100%-3rem)]">
+    <div v-show="isExpanded" class="h-[calc(100%-3rem)] overflow-hidden">
       <!-- Main Tabs -->
       <div class="flex border-b dark:border-gray-700">
         <button v-for="(tab, index) in mainTabs" 
@@ -56,7 +63,7 @@ const navItems = [
       <!-- Tab Content -->
       <div class="flex h-[calc(100%-2.5rem)]">
         <!-- Left Navigation -->
-        <div class="w-48 border-r dark:border-gray-700 p-4">
+        <div class="w-48 border-r dark:border-gray-700 p-4 overflow-y-auto">
           <ul>
             <li v-for="item in navItems" 
                 :key="item.id"
@@ -67,7 +74,7 @@ const navItems = [
         </div>
 
         <!-- Middle Table -->
-        <div class="flex-1 p-4 border-r dark:border-gray-700">
+        <div class="flex-1 p-4 border-r dark:border-gray-700 overflow-y-auto">
           <table class="min-w-full">
             <thead>
               <tr>
@@ -100,7 +107,7 @@ const navItems = [
           </div>
 
           <!-- Right Tab Content -->
-          <div class="p-4">
+          <div class="p-4 overflow-y-auto h-[calc(100%-2.5rem)]">
             <div v-if="activeRightTab === 0" class="text-gray-600 dark:text-gray-400">
               Chart View (Placeholder)
             </div>

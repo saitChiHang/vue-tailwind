@@ -26,9 +26,9 @@ const toggleDark = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-white dark:bg-gray-900 transition-colors duration-200">
+  <div class="h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200 overflow-hidden">
     <Navbar :isDark="isDark" @toggle-dark="toggleDark" />
-    <div class="container mx-auto px-4 pt-20 pb-[500px]">
+    <div class="flex-1 pt-16 px-4">
       <MapComponent />
     </div>
     <BottomPanel />
