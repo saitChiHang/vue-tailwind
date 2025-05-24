@@ -23,6 +23,18 @@ const navItems = Array.from({ length: 15 }, (_, i) => ({
   id: i + 1,
   name: `Navigation ${i + 1}`
 }));
+
+const dropdownOptions = [
+  'Option 1',
+  'Option 2',
+  'Option 3',
+  'Option 4',
+  'Option 5'
+];
+
+const selectedOption1 = ref(dropdownOptions[0]);
+const selectedOption2 = ref(dropdownOptions[0]);
+const selectedOption3 = ref(dropdownOptions[0]);
 </script>
 
 <template>
@@ -67,20 +79,49 @@ const navItems = Array.from({ length: 15 }, (_, i) => ({
 
         <!-- Middle Table -->
         <div class="flex-1 border-r dark:border-gray-700 overflow-y-auto">
-          <table class="min-w-full">
-            <thead class="sticky top-0 bg-white dark:bg-gray-800">
-              <tr>
-                <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Name</th>
-                <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="row in mockTableData" :key="row.id">
-                <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.name }}</td>
-                <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.value }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- Tab 1 Content -->
+          <div v-if="activeMainTab === 0" class="p-4">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Select an option
+              </label>
+              <select v-model="selectedOption1"
+                      class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
+                <option v-for="option in dropdownOptions" :key="option" :value="option">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
+            <table class="min-w-full">
+              <thead class="bg-white dark:bg-gray-800">
+                <tr>
+                  <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Name</th>
+                  <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="row in mockTableData" :key="row.id">
+                  <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.name }}</td>
+                  <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.value }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Tab 2 Content -->
+          <div v-else class="p-4">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Select an option
+              </label>
+              <select v-model="selectedOption2"
+                      class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
+                <option v-for="option in dropdownOptions" :key="option" :value="option">
+                  {{ option }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
 
         <!-- Right Section -->
@@ -99,10 +140,28 @@ const navItems = Array.from({ length: 15 }, (_, i) => ({
           </div>
 
           <!-- Right Tab Content -->
-          <div class="overflow-y-auto h-[calc(100%-2.5rem)]">
-            <div v-if="activeRightTab === 0" class="p-4 text-gray-600 dark:text-gray-400">
+          <div class="overflow-y-auto h-[calc(100%-2.5rem)] p-4">
+            <!-- Tab 2 Right Column -->
+            <div v-if="activeMainTab === 1">
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Select an option
+                </label>
+                <select v-model="selectedOption3"
+                        class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
+                  <option v-for="option in dropdownOptions" :key="option" :value="option">
+                    {{ option }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Chart View -->
+            <div v-if="activeRightTab === 0" class="text-gray-600 dark:text-gray-400">
               Chart View (Placeholder)
             </div>
+
+            <!-- Table View -->
             <div v-else>
               <table class="min-w-full">
                 <thead class="sticky top-0 bg-white dark:bg-gray-800">
