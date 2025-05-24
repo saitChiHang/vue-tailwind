@@ -35,6 +35,7 @@ const dropdownOptions = [
 const selectedOption1 = ref(dropdownOptions[0]);
 const selectedOption2 = ref(dropdownOptions[0]);
 const selectedOption3 = ref(dropdownOptions[0]);
+const selectedRadio = ref('option1');
 </script>
 
 <template>
@@ -68,7 +69,18 @@ const selectedOption3 = ref(dropdownOptions[0]);
       <div class="flex h-[calc(100%-2.5rem)]">
         <!-- Left Navigation -->
         <div class="w-48 border-r dark:border-gray-700 overflow-y-auto">
-          <ul class="p-4">
+          <div v-if="activeMainTab === 1" class="p-4">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              First Column Dropdown
+            </label>
+            <select v-model="selectedOption1"
+                    class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
+              <option v-for="option in dropdownOptions" :key="option" :value="option">
+                {{ option }}
+              </option>
+            </select>
+          </div>
+          <ul v-else class="p-4">
             <li v-for="item in navItems" 
                 :key="item.id"
                 class="py-2 px-3 rounded-lg cursor-pointer text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -112,7 +124,7 @@ const selectedOption3 = ref(dropdownOptions[0]);
           <div v-else class="p-4">
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Select an option
+                Second Column Dropdown
               </label>
               <select v-model="selectedOption2"
                       class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
@@ -145,14 +157,35 @@ const selectedOption3 = ref(dropdownOptions[0]);
             <div v-if="activeMainTab === 1">
               <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Select an option
+                  Third Column Dropdown
                 </label>
                 <select v-model="selectedOption3"
-                        class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
+                        class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600 mb-4">
                   <option v-for="option in dropdownOptions" :key="option" :value="option">
                     {{ option }}
                   </option>
                 </select>
+
+                <div class="space-y-2">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    Select an option:
+                  </label>
+                  <div class="flex items-center">
+                    <input type="radio" id="option1" value="option1" v-model="selectedRadio"
+                           class="text-blue-600 focus:ring-blue-500 h-4 w-4 dark:bg-gray-700">
+                    <label for="option1" class="ml-2 text-gray-700 dark:text-gray-300">Option 1</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input type="radio" id="option2" value="option2" v-model="selectedRadio"
+                           class="text-blue-600 focus:ring-blue-500 h-4 w-4 dark:bg-gray-700">
+                    <label for="option2" class="ml-2 text-gray-700 dark:text-gray-300">Option 2</label>
+                  </div>
+                  <div class="flex items-center">
+                    <input type="radio" id="option3" value="option3" v-model="selectedRadio"
+                           class="text-blue-600 focus:ring-blue-500 h-4 w-4 dark:bg-gray-700">
+                    <label for="option3" class="ml-2 text-gray-700 dark:text-gray-300">Option 3</label>
+                  </div>
+                </div>
               </div>
             </div>
 
