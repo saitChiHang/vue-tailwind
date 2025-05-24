@@ -29,5 +29,5 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div id="map" class="h-full w-full rounded-lg shadow-lg"></div>
+  <div id="map" class="absolute inset-0"></div>
 </template>

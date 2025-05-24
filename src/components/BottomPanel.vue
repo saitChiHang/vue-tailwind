@@ -13,28 +13,20 @@ const togglePanel = () => {
   isExpanded.value = !isExpanded.value;
 };
 
-const mockTableData = [
-  { id: 1, name: 'Item 1', value: 100 },
-  { id: 2, name: 'Item 2', value: 200 },
-  { id: 3, name: 'Item 3', value: 300 },
-  { id: 4, name: 'Item 4', value: 400 },
-  { id: 5, name: 'Item 5', value: 500 },
-  { id: 6, name: 'Item 6', value: 600 },
-  { id: 7, name: 'Item 7', value: 700 },
-  { id: 8, name: 'Item 8', value: 800 },
-];
+const mockTableData = Array.from({ length: 20 }, (_, i) => ({
+  id: i + 1,
+  name: `Item ${i + 1}`,
+  value: (i + 1) * 100
+}));
 
-const navItems = [
-  { id: 1, name: 'Navigation 1' },
-  { id: 2, name: 'Navigation 2' },
-  { id: 3, name: 'Navigation 3' },
-  { id: 4, name: 'Navigation 4' },
-  { id: 5, name: 'Navigation 5' },
-];
+const navItems = Array.from({ length: 15 }, (_, i) => ({
+  id: i + 1,
+  name: `Navigation ${i + 1}`
+}));
 </script>
 
 <template>
-  <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg transition-all duration-300"
+  <div class="relative bg-white dark:bg-gray-800 shadow-lg transition-all duration-300"
        :class="{ 'h-[40vh]': isExpanded, 'h-12': !isExpanded }">
     <!-- Header -->
     <div class="flex items-center justify-between px-4 h-12 border-b dark:border-gray-700">
@@ -46,7 +38,7 @@ const navItems = [
     </div>
 
     <!-- Content -->
-    <div v-show="isExpanded" class="h-[calc(100%-3rem)] overflow-hidden">
+    <div v-show="isExpanded" class="h-[calc(100%-3rem)]">
       <!-- Main Tabs -->
       <div class="flex border-b dark:border-gray-700">
         <button v-for="(tab, index) in mainTabs" 
@@ -63,8 +55,8 @@ const navItems = [
       <!-- Tab Content -->
       <div class="flex h-[calc(100%-2.5rem)]">
         <!-- Left Navigation -->
-        <div class="w-48 border-r dark:border-gray-700 p-4 overflow-y-auto">
-          <ul>
+        <div class="w-48 border-r dark:border-gray-700 overflow-y-auto">
+          <ul class="p-4">
             <li v-for="item in navItems" 
                 :key="item.id"
                 class="py-2 px-3 rounded-lg cursor-pointer text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -74,9 +66,9 @@ const navItems = [
         </div>
 
         <!-- Middle Table -->
-        <div class="flex-1 p-4 border-r dark:border-gray-700 overflow-y-auto">
+        <div class="flex-1 border-r dark:border-gray-700 overflow-y-auto">
           <table class="min-w-full">
-            <thead>
+            <thead class="sticky top-0 bg-white dark:bg-gray-800">
               <tr>
                 <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Name</th>
                 <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
@@ -94,7 +86,7 @@ const navItems = [
         <!-- Right Section -->
         <div class="w-96">
           <!-- Right Tabs -->
-          <div class="flex border-b dark:border-gray-700">
+          <div class="flex border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800">
             <button v-for="(tab, index) in rightTabs" 
                     :key="index"
                     @click="activeRightTab = index"
@@ -107,13 +99,13 @@ const navItems = [
           </div>
 
           <!-- Right Tab Content -->
-          <div class="p-4 overflow-y-auto h-[calc(100%-2.5rem)]">
-            <div v-if="activeRightTab === 0" class="text-gray-600 dark:text-gray-400">
+          <div class="overflow-y-auto h-[calc(100%-2.5rem)]">
+            <div v-if="activeRightTab === 0" class="p-4 text-gray-600 dark:text-gray-400">
               Chart View (Placeholder)
             </div>
-            <div v-else class="text-gray-600 dark:text-gray-400">
+            <div v-else>
               <table class="min-w-full">
-                <thead>
+                <thead class="sticky top-0 bg-white dark:bg-gray-800">
                   <tr>
                     <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Name</th>
                     <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
