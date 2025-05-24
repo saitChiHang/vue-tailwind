@@ -27,10 +27,10 @@ const toggleDark = () => {
 
 <template>
   <div class="h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200">
-    <Navbar :isDark="isDark" @toggle-dark="toggleDark" />
-    <div class="flex-1 relative">
+    <Navbar :isDark="isDark" @toggle-dark="toggleDark" class="z-50" />
+    <div class="flex-1 relative mt-16">
       <MapComponent />
     </div>
-    <BottomPanel />
+    <BottomPanel class="z-40" />
   </div>
 </template>

@@ -9,7 +9,7 @@ defineEmits(['toggleDark'])
 </script>
 
 <template>
-  <nav class="fixed w-full bg-white dark:bg-gray-800 shadow-md transition-colors duration-200">
+  <nav class="fixed top-0 w-full bg-white dark:bg-gray-800 shadow-md transition-colors duration-200 z-50">
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center">
