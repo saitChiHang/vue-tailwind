@@ -6,7 +6,7 @@ const isExpanded = ref(true);
 const activeMainTab = ref(0);
 const activeRightTab = ref(0);
 
-const mainTabs = ['Tab 1', 'Tab 2'];
+const mainTabs = ['Data Explorer', 'Map Explorer'];
 const rightTabs = ['Chart', 'Table'];
 
 const togglePanel = () => {
@@ -35,7 +35,6 @@ const dropdownOptions = [
 const selectedOption1 = ref(dropdownOptions[0]);
 const selectedOption2 = ref(dropdownOptions[0]);
 const selectedOption3 = ref(dropdownOptions[0]);
-const selectedRadio = ref('option1');
 </script>
 
 <template>
@@ -91,7 +90,7 @@ const selectedRadio = ref('option1');
 
         <!-- Middle Table -->
         <div class="flex-1 border-r dark:border-gray-700 overflow-y-auto">
-          <!-- Tab 1 Content -->
+          <!-- Data Explorer Content -->
           <div v-if="activeMainTab === 0" class="p-4">
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -120,7 +119,7 @@ const selectedRadio = ref('option1');
             </table>
           </div>
 
-          <!-- Tab 2 Content -->
+          <!-- Map Explorer Content -->
           <div v-else class="p-4">
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -138,78 +137,55 @@ const selectedRadio = ref('option1');
 
         <!-- Right Section -->
         <div class="w-96">
-          <!-- Right Tabs -->
-          <div class="flex border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800">
-            <button v-for="(tab, index) in rightTabs" 
-                    :key="index"
-                    @click="activeRightTab = index"
-                    class="px-4 py-2 font-medium transition-colors duration-200"
-                    :class="activeRightTab === index 
-                      ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400' 
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white'">
-              {{ tab }}
-            </button>
+          <div v-if="activeMainTab === 1" class="p-4">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Third Column Dropdown
+            </label>
+            <select v-model="selectedOption3"
+                    class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
+              <option v-for="option in dropdownOptions" :key="option" :value="option">
+                {{ option }}
+              </option>
+            </select>
           </div>
+          <div v-else>
+            <!-- Right Tabs -->
+            <div class="flex border-b dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800">
+              <button v-for="(tab, index) in rightTabs" 
+                      :key="index"
+                      @click="activeRightTab = index"
+                      class="px-4 py-2 font-medium transition-colors duration-200"
+                      :class="activeRightTab === index 
+                        ? 'text-blue-600 border-b-2 border-blue-600 dark:text-blue-400 dark:border-blue-400' 
+                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white'">
+                {{ tab }}
+              </button>
+            </div>
 
-          <!-- Right Tab Content -->
-          <div class="overflow-y-auto h-[calc(100%-2.5rem)] p-4">
-            <!-- Tab 2 Right Column -->
-            <div v-if="activeMainTab === 1">
-              <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Third Column Dropdown
-                </label>
-                <select v-model="selectedOption3"
-                        class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600 mb-4">
-                  <option v-for="option in dropdownOptions" :key="option" :value="option">
-                    {{ option }}
-                  </option>
-                </select>
-
-                <div class="space-y-2">
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Select an option:
-                  </label>
-                  <div class="flex items-center">
-                    <input type="radio" id="option1" value="option1" v-model="selectedRadio"
-                           class="text-blue-600 focus:ring-blue-500 h-4 w-4 dark:bg-gray-700">
-                    <label for="option1" class="ml-2 text-gray-700 dark:text-gray-300">Option 1</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input type="radio" id="option2" value="option2" v-model="selectedRadio"
-                           class="text-blue-600 focus:ring-blue-500 h-4 w-4 dark:bg-gray-700">
-                    <label for="option2" class="ml-2 text-gray-700 dark:text-gray-300">Option 2</label>
-                  </div>
-                  <div class="flex items-center">
-                    <input type="radio" id="option3" value="option3" v-model="selectedRadio"
-                           class="text-blue-600 focus:ring-blue-500 h-4 w-4 dark:bg-gray-700">
-                    <label for="option3" class="ml-2 text-gray-700 dark:text-gray-300">Option 3</label>
-                  </div>
-                </div>
+            <!-- Right Tab Content -->
+            <div class="overflow-y-auto h-[calc(100%-2.5rem)] p-4">
+              <!-- Chart View -->
+              <div v-if="activeRightTab === 0" class="text-gray-600 dark:text-gray-400">
+                Chart View (Placeholder)
               </div>
-            </div>
 
-            <!-- Chart View -->
-            <div v-if="activeRightTab === 0" class="text-gray-600 dark:text-gray-400">
-              Chart View (Placeholder)
-            </div>
-
-            <!-- Table View -->
-            <div v-else>
-              <table class="min-w-full">
-                <thead class="sticky top-0 bg-white dark:bg-gray-800">
-                  <tr>
-                    <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Name</th>
-                    <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="row in mockTableData" :key="row.id">
-                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.name }}</td>
-                    <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.value }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <!-- Table View -->
+              <div v-else>
+                <table class="min-w-full">
+                  <thead class="sticky top-0 bg-white dark:bg-gray-800">
+                    <tr>
+                      <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Name</th>
+                      <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="row in mockTableData" :key="row.id">
+                      <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.name }}</td>
+                      <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.value }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
