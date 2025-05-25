@@ -48,5 +48,15 @@
     "Projected.Range.(2035-2064)": "[7.2, 8.4]",
     "2080s.(2070-2099).Estimated.Value": 8.9,
     "Projected.Range.(2070-2099)": "[8.2, 9.6]"
+  },
+  {
+    "Hazard Type": "Wildland 123",
+    "Index Name": "Fire Risk Index",
+    "2030s.(2015-2044).Estimated.Value": 6.4,
+    "Projected.Range.(2015-2044)": "[5.8, 7.0]",
+    "2050s.(2035-2064).Estimated.Value": 7.8,
+    "Projected.Range.(2035-2064)": "[7.2, 8.4]",
+    "2080s.(2070-2099).Estimated.Value": 8.9,
+    "Projected.Range.(2070-2099)": "[8.2, 9.6]"
   }
 ]
