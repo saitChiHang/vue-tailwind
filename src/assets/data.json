@@ -8,5 +8,15 @@
     "Projected.Range.(2035-2064)": "[1.0, 3.0]",
     "2080s.(2070-2099).Estimated.Value": 3.0,
     "Projected.Range.(2070-2099)": "[2.0, 4.0]"
-  }
+  },
+    {
+    "Hazard Type": "Dummy Data2",
+    "Index Name": "Example2",
+    "2030s.(2015-2044).Estimated.Value": 1.0,
+    "Projected.Range.(2015-2044)": "[0.5, 1.5]",
+    "2050s.(2035-2064).Estimated.Value": 2.0,
+    "Projected.Range.(2035-2064)": "[1.0, 3.0]",
+    "2080s.(2070-2099).Estimated.Value": 3.0,
+    "Projected.Range.(2070-2099)": "[2.0, 4.0]"
+  },
 ]
