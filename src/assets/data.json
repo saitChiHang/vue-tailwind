@@ -1,12 +1,52 @@
 [
   {
-    "Hazard Type": "Dummy Data",
-    "Index Name": "Example",
-    "2030s.(2015-2044).Estimated.Value": 1.0,
-    "Projected.Range.(2015-2044)": "[0.5, 1.5]",
-    "2050s.(2035-2064).Estimated.Value": 2.0,
-    "Projected.Range.(2035-2064)": "[1.0, 3.0]",
-    "2080s.(2070-2099).Estimated.Value": 3.0,
-    "Projected.Range.(2070-2099)": "[2.0, 4.0]"
+    "Hazard Type": "Extreme Heat and Heatwaves",
+    "Index Name": "Maximum Temperature",
+    "2030s.(2015-2044).Estimated.Value": 35.2,
+    "Projected.Range.(2015-2044)": "[34.1, 36.5]",
+    "2050s.(2035-2064).Estimated.Value": 37.8,
+    "Projected.Range.(2035-2064)": "[36.5, 39.2]",
+    "2080s.(2070-2099).Estimated.Value": 40.5,
+    "Projected.Range.(2070-2099)": "[38.9, 42.1]"
+  },
+  {
+    "Hazard Type": "Heavy Precipitation and Flooding",
+    "Index Name": "Annual Rainfall",
+    "2030s.(2015-2044).Estimated.Value": 1250.5,
+    "Projected.Range.(2015-2044)": "[1200.0, 1300.0]",
+    "2050s.(2035-2064).Estimated.Value": 1320.8,
+    "Projected.Range.(2035-2064)": "[1280.0, 1360.0]",
+    "2080s.(2070-2099).Estimated.Value": 1450.2,
+    "Projected.Range.(2070-2099)": "[1400.0, 1500.0]"
+  },
+  {
+    "Hazard Type": "Drought",
+    "Index Name": "Dry Days per Year",
+    "2030s.(2015-2044).Estimated.Value": 45.6,
+    "Projected.Range.(2015-2044)": "[42.0, 48.0]",
+    "2050s.(2035-2064).Estimated.Value": 52.3,
+    "Projected.Range.(2035-2064)": "[48.0, 55.0]",
+    "2080s.(2070-2099).Estimated.Value": 58.9,
+    "Projected.Range.(2070-2099)": "[55.0, 62.0]"
+  },
+  {
+    "Hazard Type": "Avalanches and Landslides",
+    "Index Name": "Slope Stability Index",
+    "2030s.(2015-2044).Estimated.Value": 0.82,
+    "Projected.Range.(2015-2044)": "[0.78, 0.85]",
+    "2050s.(2035-2064).Estimated.Value": 0.76,
+    "Projected.Range.(2035-2064)": "[0.72, 0.80]",
+    "2080s.(2070-2099).Estimated.Value": 0.70,
+    "Projected.Range.(2070-2099)": "[0.65, 0.75]"
+  },
+  {
+    "Hazard Type": "Wildland Fire",
+    "Index Name": "Fire Risk Index",
+    "2030s.(2015-2044).Estimated.Value": 6.4,
+    "Projected.Range.(2015-2044)": "[5.8, 7.0]",
+    "2050s.(2035-2064).Estimated.Value": 7.8,
+    "Projected.Range.(2035-2064)": "[7.2, 8.4]",
+    "2080s.(2070-2099).Estimated.Value": 8.9,
+    "Projected.Range.(2070-2099)": "[8.2, 9.6]"
   }
 ]
