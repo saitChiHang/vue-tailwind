@@ -1,28 +1,63 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/24/outline';
+import hazardData from '../assets/data.json';
 
 const isExpanded = ref(true);
 const activeMainTab = ref(0);
 const activeRightTab = ref(0);
+const selectedYear = ref('2030');
+const selectedHazard = ref('');
+const selectedRows = ref([]);
 
 const mainTabs = ['Data Explorer', 'Map Explorer'];
 const rightTabs = ['Chart', 'Table'];
+const years = ['2030', '2050', '2080'];
+
+// Get unique hazard types
+const hazardTypes = computed(() => {
+  const types = new Set();
+  hazardData.forEach(item => {
+    if (item['Hazard Type']) {
+      types.add(item['Hazard Type']);
+    }
+  });
+  return Array.from(types);
+});
+
+// Get filtered data based on selected hazard and year
+const filteredData = computed(() => {
+  if (!selectedHazard.value) return [];
+  return hazardData.filter(item => 
+    item['Hazard Type'] === selectedHazard.value
+  ).map(item => ({
+    index: item['Index Name'],
+    value: item[`${selectedYear.value}s.(${getYearRange(selectedYear.value)}).Estimated.Value`],
+    range: item[`Projected.Range.(${getYearRange(selectedYear.value)})`]
+  }));
+});
+
+function getYearRange(year) {
+  const ranges = {
+    '2030': '2015-2044',
+    '2050': '2035-2064',
+    '2080': '2070-2099'
+  };
+  return ranges[year];
+}
 
 const togglePanel = () => {
   isExpanded.value = !isExpanded.value;
 };
 
-const mockTableData = Array.from({ length: 20 }, (_, i) => ({
-  id: i + 1,
-  name: `Item ${i + 1}`,
-  value: (i + 1) * 100
-}));
-
-const navItems = Array.from({ length: 15 }, (_, i) => ({
-  id: i + 1,
-  name: `Navigation ${i + 1}`
-}));
+const toggleRowSelection = (index) => {
+  const position = selectedRows.value.indexOf(index);
+  if (position === -1) {
+    selectedRows.value.push(index);
+  } else {
+    selectedRows.value.splice(position, 1);
+  }
+};
 
 const dropdownOptions = [
   'Option 1',
@@ -79,11 +114,15 @@ const selectedOption3 = ref(dropdownOptions[0]);
               </option>
             </select>
           </div>
-          <ul v-else class="p-4">
-            <li v-for="item in navItems" 
-                :key="item.id"
-                class="py-2 px-3 rounded-lg cursor-pointer text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
-              {{ item.name }}
+          <ul v-else class="p-4 space-y-2">
+            <li v-for="hazard in hazardTypes" 
+                :key="hazard"
+                @click="selectedHazard = hazard"
+                class="py-2 px-3 rounded-lg cursor-pointer transition-colors duration-200"
+                :class="selectedHazard === hazard 
+                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200' 
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'">
+              {{ hazard }}
             </li>
           </ul>
         </div>
@@ -94,26 +133,39 @@ const selectedOption3 = ref(dropdownOptions[0]);
           <div v-if="activeMainTab === 0" class="p-4">
             <div class="mb-4">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Select an option
+                Select Year
               </label>
-              <select v-model="selectedOption1"
+              <select v-model="selectedYear"
                       class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
-                <option v-for="option in dropdownOptions" :key="option" :value="option">
-                  {{ option }}
+                <option v-for="year in years" :key="year" :value="year">
+                  {{ year }}s
                 </option>
               </select>
             </div>
             <table class="min-w-full">
               <thead class="bg-white dark:bg-gray-800">
                 <tr>
-                  <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Name</th>
+                  <th class="w-8 py-2 px-4 border-b dark:border-gray-700"></th>
+                  <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Index</th>
                   <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
+                  <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Range</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="row in mockTableData" :key="row.id">
-                  <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.name }}</td>
+                <tr v-for="(row, index) in filteredData" 
+                    :key="index"
+                    @click="toggleRowSelection(index)"
+                    class="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
+                    :class="{'bg-blue-50 dark:bg-blue-900': selectedRows.includes(index)}">
+                  <td class="py-2 px-4">
+                    <input type="checkbox" 
+                           :checked="selectedRows.includes(index)"
+                           @click.stop
+                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                  </td>
+                  <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.index }}</td>
                   <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.value }}</td>
+                  <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.range }}</td>
                 </tr>
               </tbody>
             </table>
@@ -139,7 +191,7 @@ const selectedOption3 = ref(dropdownOptions[0]);
         <div class="w-96">
           <div v-if="activeMainTab === 1" class="p-4">
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Third Column Dropdown
+              Select Option
             </label>
             <select v-model="selectedOption3"
                     class="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white border-gray-300 dark:border-gray-600">
@@ -174,13 +226,15 @@ const selectedOption3 = ref(dropdownOptions[0]);
                 <table class="min-w-full">
                   <thead class="sticky top-0 bg-white dark:bg-gray-800">
                     <tr>
-                      <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Name</th>
+                      <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Index</th>
                       <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="row in mockTableData" :key="row.id">
-                      <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.name }}</td>
+                    <tr v-for="(row, index) in filteredData" 
+                        :key="index"
+                        v-show="selectedRows.includes(index)">
+                      <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.index }}</td>
                       <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.value }}</td>
                     </tr>
                   </tbody>
