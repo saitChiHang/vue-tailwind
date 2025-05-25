@@ -14,7 +14,7 @@ defineEmits(['toggleDark'])
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center">
           <a href="/" class="text-xl font-bold text-gray-800 dark:text-white">
-            Vue App
+            Hazard Explorer
           </a>
         </div>
         
