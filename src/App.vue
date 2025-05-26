@@ -5,6 +5,7 @@ import Navbar from './components/Navbar.vue'
 import BottomPanel from './components/BottomPanel.vue'
 
 const isDark = ref(false)
+const mapRef = ref(null)
 
 onMounted(() => {
   if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -23,14 +24,20 @@ const toggleDark = () => {
     localStorage.theme = 'light'
   }
 }
+
+const handlePanelToggle = () => {
+  setTimeout(() => {
+    mapRef.value?.invalidateMapSize();
+  }, 300); // Delay to allow panel animation to complete
+}
 </script>
 
 <template>
   <div class="h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200">
     <Navbar :isDark="isDark" @toggle-dark="toggleDark" class="z-50" />
     <div class="flex-1 relative mt-16">
-      <MapComponent />
+      <MapComponent ref="mapRef" />
     </div>
-    <BottomPanel class="z-40" />
+    <BottomPanel class="z-40" @panel-toggle="handlePanelToggle" />
   </div>
 </template>

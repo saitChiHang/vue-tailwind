@@ -1,9 +1,17 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, watch } from 'vue';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 let map = null;
+
+const invalidateMapSize = () => {
+  if (map) {
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 200); // Small delay to ensure DOM has updated
+  }
+};
 
 onMounted(() => {
   // Create map instance
@@ -19,6 +27,9 @@ onMounted(() => {
     .addTo(map)
     .bindPopup('A sample marker!')
     .openPopup();
+
+  // Initial size check
+  invalidateMapSize();
 });
 
 onUnmounted(() => {
@@ -26,6 +37,9 @@ onUnmounted(() => {
     map.remove();
   }
 });
+
+// Export method to be called from parent
+defineExpose({ invalidateMapSize });
 </script>
 
 <template>
