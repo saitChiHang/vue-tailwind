@@ -1,14 +1,18 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/24/outline';
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import hazardData from '../assets/data.json';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const isExpanded = ref(true);
 const activeMainTab = ref(0);
 const activeRightTab = ref(0);
 const selectedYear = ref('2030');
 const selectedHazard = ref('');
-const selectedRows = ref([]);
+const selectedRow = ref(null);
 const isDragging = ref(false);
 const startY = ref(0);
 const startHeight = ref(0);
@@ -41,6 +45,43 @@ const filteredData = computed(() => {
   }));
 });
 
+// Chart data for selected row
+const chartData = computed(() => {
+  if (selectedRow.value === null || !selectedHazard.value) return null;
+  
+  const selectedItem = hazardData.find(item => 
+    item['Hazard Type'] === selectedHazard.value && 
+    item['Index Name'] === filteredData.value[selectedRow.value].index
+  );
+  
+  if (!selectedItem) return null;
+
+  return {
+    labels: ['2030s', '2050s', '2080s'],
+    datasets: [{
+      label: selectedItem['Index Name'],
+      data: [
+        selectedItem['2030s.(2015-2044).Estimated.Value'],
+        selectedItem['2050s.(2035-2064).Estimated.Value'],
+        selectedItem['2080s.(2070-2099).Estimated.Value']
+      ],
+      backgroundColor: 'rgba(59, 130, 246, 0.5)',
+      borderColor: 'rgb(59, 130, 246)',
+      borderWidth: 1
+    }]
+  };
+});
+
+const chartOptions = {
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    y: {
+      beginAtZero: true
+    }
+  }
+};
+
 function getYearRange(year) {
   const ranges = {
     '2030': '2015-2044',
@@ -49,10 +90,6 @@ function getYearRange(year) {
   };
   return ranges[year];
 }
-
-const togglePanel = () => {
-  isExpanded.value = !isExpanded.value;
-};
 
 const startDragging = (e) => {
   isDragging.value = true;
@@ -75,13 +112,8 @@ const stopDragging = () => {
   document.removeEventListener('mouseup', stopDragging);
 };
 
-const toggleRowSelection = (index) => {
-  const position = selectedRows.value.indexOf(index);
-  if (position === -1) {
-    selectedRows.value.push(index);
-  } else {
-    selectedRows.value.splice(position, 1);
-  }
+const togglePanel = () => {
+  isExpanded.value = !isExpanded.value;
 };
 
 const dropdownOptions = [
@@ -178,7 +210,6 @@ const selectedOption3 = ref(dropdownOptions[0]);
             <table class="min-w-full">
               <thead class="bg-white dark:bg-gray-800">
                 <tr>
-                  <th class="w-8 py-2 px-4 border-b dark:border-gray-700"></th>
                   <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Index</th>
                   <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
                   <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Range</th>
@@ -187,15 +218,9 @@ const selectedOption3 = ref(dropdownOptions[0]);
               <tbody>
                 <tr v-for="(row, index) in filteredData" 
                     :key="index"
-                    @click="toggleRowSelection(index)"
+                    @click="selectedRow = index"
                     class="cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
-                    :class="{'bg-blue-50 dark:bg-blue-900': selectedRows.includes(index)}">
-                  <td class="py-2 px-4">
-                    <input type="checkbox" 
-                           :checked="selectedRows.includes(index)"
-                           @click.stop
-                           class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                  </td>
+                    :class="{'bg-blue-50 dark:bg-blue-900': selectedRow === index}">
                   <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.index }}</td>
                   <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.value }}</td>
                   <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.range }}</td>
@@ -250,28 +275,40 @@ const selectedOption3 = ref(dropdownOptions[0]);
             <!-- Right Tab Content -->
             <div class="overflow-y-auto h-[calc(100%-2.5rem)] p-4">
               <!-- Chart View -->
-              <div v-if="activeRightTab === 0" class="text-gray-600 dark:text-gray-400">
-                Chart View (Placeholder)
+              <div v-if="activeRightTab === 0" class="h-full">
+                <Bar v-if="chartData" 
+                     :data="chartData" 
+                     :options="chartOptions" 
+                     class="h-full" />
+                <div v-else class="flex items-center justify-center h-full text-gray-500">
+                  Select a row to view the chart
+                </div>
               </div>
 
               <!-- Table View -->
               <div v-else>
-                <table class="min-w-full">
-                  <thead class="sticky top-0 bg-white dark:bg-gray-800">
+                <table v-if="selectedRow !== null" class="min-w-full">
+                  <thead class="bg-white dark:bg-gray-800">
                     <tr>
-                      <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Index</th>
+                      <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Year</th>
                       <th class="text-left py-2 px-4 border-b dark:border-gray-700 text-gray-800 dark:text-white">Value</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(row, index) in filteredData" 
-                        :key="index"
-                        v-show="selectedRows.includes(index)">
-                      <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.index }}</td>
-                      <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ row.value }}</td>
+                    <tr v-for="year in ['2030', '2050', '2080']" :key="year">
+                      <td class="py-2 px-4 text-gray-600 dark:text-gray-400">{{ year }}s</td>
+                      <td class="py-2 px-4 text-gray-600 dark:text-gray-400">
+                        {{ hazardData.find(item => 
+                          item['Hazard Type'] === selectedHazard && 
+                          item['Index Name'] === filteredData[selectedRow].index
+                        )?.[`${year}s.(${getYearRange(year)}).Estimated.Value`] }}
+                      </td>
                     </tr>
                   </tbody>
                 </table>
+                <div v-else class="text-gray-500 text-center mt-4">
+                  Select a row to view the data
+                </div>
               </div>
             </div>
           </div>
