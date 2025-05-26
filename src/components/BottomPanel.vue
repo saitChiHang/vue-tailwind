@@ -22,6 +22,8 @@ const mainTabs = ['Data Explorer', 'Map Explorer'];
 const rightTabs = ['Chart', 'Table'];
 const years = ['2030', '2050', '2080'];
 
+const emit = defineEmits(['panel-toggle']);
+
 // Get unique hazard types
 const hazardTypes = computed(() => {
   const types = new Set();
@@ -114,6 +116,7 @@ const stopDragging = () => {
 
 const togglePanel = () => {
   isExpanded.value = !isExpanded.value;
+  emit('panel-toggle');
 };
 
 const dropdownOptions = [
