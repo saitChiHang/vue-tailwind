@@ -9,6 +9,10 @@ const activeRightTab = ref(0);
 const selectedYear = ref('2030');
 const selectedHazard = ref('');
 const selectedRows = ref([]);
+const isDragging = ref(false);
+const startY = ref(0);
+const startHeight = ref(0);
+const panelHeight = ref(40); // Default height in vh
 
 const mainTabs = ['Data Explorer', 'Map Explorer'];
 const rightTabs = ['Chart', 'Table'];
@@ -50,6 +54,27 @@ const togglePanel = () => {
   isExpanded.value = !isExpanded.value;
 };
 
+const startDragging = (e) => {
+  isDragging.value = true;
+  startY.value = e.clientY;
+  startHeight.value = panelHeight.value;
+  document.addEventListener('mousemove', onDrag);
+  document.addEventListener('mouseup', stopDragging);
+};
+
+const onDrag = (e) => {
+  if (!isDragging.value) return;
+  const delta = startY.value - e.clientY;
+  const newHeight = startHeight.value + (delta / window.innerHeight * 100);
+  panelHeight.value = Math.min(Math.max(20, newHeight), 80); // Limit between 20vh and 80vh
+};
+
+const stopDragging = () => {
+  isDragging.value = false;
+  document.removeEventListener('mousemove', onDrag);
+  document.removeEventListener('mouseup', stopDragging);
+};
+
 const toggleRowSelection = (index) => {
   const position = selectedRows.value.indexOf(index);
   if (position === -1) {
@@ -74,7 +99,15 @@ const selectedOption3 = ref(dropdownOptions[0]);
 
 <template>
   <div class="relative bg-white dark:bg-gray-800 shadow-lg transition-all duration-300"
-       :class="{ 'h-[40vh]': isExpanded, 'h-12': !isExpanded }">
+       :class="{ 'h-12': !isExpanded }"
+       :style="isExpanded ? `height: ${panelHeight}vh` : ''">
+    <!-- Drag Handle -->
+    <div v-if="isExpanded"
+         @mousedown="startDragging"
+         class="absolute top-0 left-0 right-0 h-1 cursor-ns-resize bg-transparent hover:bg-blue-500 transition-colors duration-200"
+         :class="{ 'bg-blue-500': isDragging }">
+    </div>
+
     <!-- Header -->
     <div class="flex items-center justify-between px-4 h-12 border-b dark:border-gray-700">
       <h3 class="text-gray-800 dark:text-white font-medium">Panel</h3>
