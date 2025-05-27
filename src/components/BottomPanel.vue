@@ -60,17 +60,30 @@ const chartData = computed(() => {
 
   return {
     labels: ['2030s', '2050s', '2080s'],
-    datasets: [{
-      label: selectedItem['Index Name'],
-      data: [
-        selectedItem['2030s.(2015-2044).Estimated.Value'],
-        selectedItem['2050s.(2035-2064).Estimated.Value'],
-        selectedItem['2080s.(2070-2099).Estimated.Value']
-      ],
-      backgroundColor: 'rgba(59, 130, 246, 0.5)',
-      borderColor: 'rgb(59, 130, 246)',
-      borderWidth: 1
-    }]
+    datasets: [
+      {
+        label: 'Lower Range',
+        data: [
+          JSON.parse(selectedItem['Projected.Range.(2015-2044)'])[0],
+          JSON.parse(selectedItem['Projected.Range.(2035-2064)'])[0],
+          JSON.parse(selectedItem['Projected.Range.(2070-2099)'])[0]
+        ],
+        backgroundColor: 'rgba(59, 130, 246, 0.3)',
+        borderColor: 'rgb(59, 130, 246)',
+        borderWidth: 1
+      },
+      {
+        label: 'Upper Range',
+        data: [
+          JSON.parse(selectedItem['Projected.Range.(2015-2044)'])[1],
+          JSON.parse(selectedItem['Projected.Range.(2035-2064)'])[1],
+          JSON.parse(selectedItem['Projected.Range.(2070-2099)'])[1]
+        ],
+        backgroundColor: 'rgba(59, 130, 246, 0.5)',
+        borderColor: 'rgb(59, 130, 246)',
+        borderWidth: 1
+      }
+    ]
   };
 });
 
