@@ -4,11 +4,23 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 let map = null;
+let currentCenter = null;
+let currentZoom = null;
 
 const invalidateMapSize = () => {
   if (map) {
+    // Store current map state
+    currentCenter = map.getCenter();
+    currentZoom = map.getZoom();
+    
     setTimeout(() => {
       map.invalidateSize();
+      // Restore map state
+      if (currentCenter && currentZoom !== null) {
+        map.setView(currentCenter, currentZoom, {
+          animate: false
+        });
+      }
     }, 200); // Small delay to ensure DOM has updated
   }
 };
