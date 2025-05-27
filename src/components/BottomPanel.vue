@@ -2,10 +2,27 @@
 import { ref, computed } from 'vue';
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/vue/24/outline';
 import { Bar } from 'vue-chartjs';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { 
+  Chart as ChartJS, 
+  CategoryScale, 
+  LinearScale, 
+  BarElement, 
+  Title, 
+  Tooltip, 
+  Legend,
+  BarController 
+} from 'chart.js';
 import hazardData from '../assets/data.json';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  BarController
+);
 
 const isExpanded = ref(true);
 const activeMainTab = ref(0);
@@ -79,7 +96,8 @@ const chartData = computed(() => {
         ],
         backgroundColor: 'rgba(59, 130, 246, 0.5)',
         borderColor: 'rgb(59, 130, 246)',
-        borderWidth: 1
+        borderWidth: 1,
+        barPercentage: 0.5
       }
     ]
   };
