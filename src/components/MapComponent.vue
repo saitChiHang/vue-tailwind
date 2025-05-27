@@ -4,21 +4,20 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 let map = null;
-let currentCenter = null;
-let currentZoom = null;
+let currentBounds = null;
 
 const invalidateMapSize = () => {
   if (map) {
-    // Store current map state
-    currentCenter = map.getCenter();
-    currentZoom = map.getZoom();
+    // Store current map bounds
+    currentBounds = map.getBounds();
     
     setTimeout(() => {
       map.invalidateSize();
-      // Restore map state
-      if (currentCenter && currentZoom !== null) {
-        map.setView(currentCenter, currentZoom, {
-          animate: false
+      // Restore map bounds
+      if (currentBounds) {
+        map.fitBounds(currentBounds, {
+          animate: false,
+          padding: [0, 0]
         });
       }
     }, 200); // Small delay to ensure DOM has updated
