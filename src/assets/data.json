@@ -10,6 +10,16 @@
     "Projected.Range.(2070-2099)": "[38.9, 42.1]"
   },
   {
+    "Hazard Type": "Extreme Heat and Heatwaves",
+    "Index Name": "Min Temperature",
+    "2030s.(2015-2044).Estimated.Value": 35.2,
+    "Projected.Range.(2015-2044)": "[34.1, 36.5]",
+    "2050s.(2035-2064).Estimated.Value": 37.8,
+    "Projected.Range.(2035-2064)": "[36.5, 39.2]",
+    "2080s.(2070-2099).Estimated.Value": 40.5,
+    "Projected.Range.(2070-2099)": "[38.9, 42.1]"
+  },
+  {
     "Hazard Type": "Heavy Precipitation and Flooding",
     "Index Name": "Annual Rainfall",
     "2030s.(2015-2044).Estimated.Value": 1250.5,
