@@ -100,25 +100,47 @@ const chartData = computed(() => {
   };
 });
 
-const chartOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  scales: {
-    y: {
-      beginAtZero: true
-    }
-  },
-  plugins: {
-    tooltip: {
-      callbacks: {
-        label: (context) => {
-          const range = context.raw;
-          return `Range: ${range[0]} - ${range[1]}`;
+const chartOptions = computed(() => {
+  if (!selectedRow.value || !selectedHazard.value) return {};
+
+  const selectedItem = hazardData.find(item => 
+    item['Hazard Type'] === selectedHazard.value && 
+    item['Index Name'] === filteredData.value[selectedRow.value].index
+  );
+
+  if (!selectedItem) return {};
+
+  // Calculate min and max values from all ranges
+  const allValues = [
+    ...JSON.parse(selectedItem['Projected.Range.(2015-2044)']),
+    ...JSON.parse(selectedItem['Projected.Range.(2035-2064)']),
+    ...JSON.parse(selectedItem['Projected.Range.(2070-2099)'])
+  ];
+  const minValue = Math.min(...allValues);
+  const maxValue = Math.max(...allValues);
+  const padding = (maxValue - minValue) * 0.1; // Add 10% padding
+
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        min: Math.max(0, minValue - padding),
+        max: maxValue + padding
+      }
+    },
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context) => {
+            const range = context.raw;
+            return `Range: ${range[0]} - ${range[1]}`;
+          }
         }
       }
     }
-  }
-};
+  };
+});
 
 function getYearRange(year) {
   const ranges = {
