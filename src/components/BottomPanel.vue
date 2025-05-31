@@ -126,7 +126,25 @@ const chartOptions = computed(() => {
     scales: {
       y: {
         min: Math.max(0, minValue - padding),
-        max: maxValue + padding
+        max: maxValue + padding,
+        title: {
+          display: true,
+          text: selectedItem['Index Name'],
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: 'Time Period',
+          font: {
+            size: 14,
+            weight: 'bold'
+          }
+        }
       }
     },
     plugins: {
